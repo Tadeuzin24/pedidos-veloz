@@ -1,0 +1,26 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "API Gateway da plataforma Pedidos Veloz",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "devops",
+    "microservices",
+    "pedidos-veloz"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^2.0.6"
+  },
+  "devDependencies": {
+    "jest": "^30.2.0",
+    "supertest": "^7.1.4"
+  }
+}

@@ -1,0 +1,109 @@
+services:
+
+  gateway:
+    build:
+      context: ./gateway
+    image: pedidos-veloz/gateway:1.0.0
+    container_name: pedidos-veloz-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      PEDIDOS_URL: http://pedidos:3000
+      PAGAMENTOS_URL: http://pagamentos:3001
+      ESTOQUE_URL: http://estoque:3002
+    depends_on:
+      pedidos:
+        condition: service_started
+      pagamentos:
+        condition: service_started
+      estoque:
+        condition: service_started
+    networks:
+      - pedidos-veloz
+
+  pedidos:
+    build:
+      context: ./pedidos
+    image: pedidos-veloz/pedidos:1.0.0
+    container_name: pedidos-veloz-pedidos
+    expose:
+      - "3000"
+    environment:
+      PORT: 3000
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pedidos_veloz
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pedidos-veloz
+
+  pagamentos:
+    build:
+      context: ./pagamentos
+    image: pedidos-veloz/pagamentos:1.0.0
+    container_name: pedidos-veloz-pagamentos
+    expose:
+      - "3001"
+    environment:
+      PORT: 3001
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pedidos_veloz
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pedidos-veloz
+
+  estoque:
+    build:
+      context: ./estoque
+    image: pedidos-veloz/estoque:1.0.0
+    container_name: pedidos-veloz-estoque
+    expose:
+      - "3002"
+    environment:
+      PORT: 3002
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: pedidos_veloz
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pedidos-veloz
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: pedidos-veloz-postgres
+    environment:
+      POSTGRES_DB: pedidos_veloz
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d pedidos_veloz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - pedidos-veloz
+
+networks:
+  pedidos-veloz:
+    driver: bridge
+
+volumes:
+  postgres-data:
