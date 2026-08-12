@@ -24,7 +24,7 @@ services:
   pedidos:
     build:
       context: ./pedidos
-    image: pedidos-veloz/pedidos:1.0.0
+    image: pedidos-veloz/pedidos:1.0.1
     container_name: pedidos-veloz-pedidos
     expose:
       - "3000"
