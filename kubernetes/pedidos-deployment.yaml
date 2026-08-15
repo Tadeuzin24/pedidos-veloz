@@ -29,7 +29,7 @@ spec:
 
       containers:
         - name: pedidos
-          image: pedidos-veloz/pedidos:1.0.1
+          image: pedidos-veloz/pedidos:1.0.2
           imagePullPolicy: IfNotPresent
 
           ports:
@@ -59,6 +59,18 @@ spec:
                 secretKeyRef:
                   name: pedidos-secret
                   key: DB_PASSWORD
+
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://jaeger.monitoring.svc.cluster.local:4318"
+
+            - name: OTEL_SERVICE_NAME
+              value: "pedidos"
+
+            - name: NODE_OPTIONS
+              value: "--require @opentelemetry/auto-instrumentations-node/register"
 
           securityContext:
             allowPrivilegeEscalation: false

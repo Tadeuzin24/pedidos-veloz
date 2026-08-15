@@ -30,7 +30,7 @@ spec:
 
       containers:
         - name: pagamentos
-          image: pedidos-veloz/pagamentos:1.0.1
+          image: pedidos-veloz/pagamentos:1.0.2
           imagePullPolicy: IfNotPresent
 
           ports:
@@ -60,6 +60,18 @@ spec:
                 secretKeyRef:
                   name: pagamentos-secret
                   key: DB_PASSWORD
+                  
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://jaeger.monitoring.svc.cluster.local:4318"
+
+            - name: OTEL_SERVICE_NAME
+              value: "pagamentos"
+
+            - name: NODE_OPTIONS
+              value: "--require @opentelemetry/auto-instrumentations-node/register"
 
           securityContext:
             allowPrivilegeEscalation: false
