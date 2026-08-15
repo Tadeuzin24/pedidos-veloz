@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-config
+  namespace: pedidos-veloz
+data:
+  PORT: "8080"
+  PEDIDOS_URL: "http://pedidos:3000"
+  PAGAMENTOS_URL: "http://pagamentos:3001"
+  ESTOQUE_URL: "http://estoque:3002"

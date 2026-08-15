@@ -3,7 +3,7 @@ services:
   gateway:
     build:
       context: ./gateway
-    image: pedidos-veloz/gateway:1.0.0
+    image: pedidos-veloz/gateway:1.0.1
     container_name: pedidos-veloz-gateway
     ports:
       - "8080:8080"
@@ -44,7 +44,7 @@ services:
   pagamentos:
     build:
       context: ./pagamentos
-    image: pedidos-veloz/pagamentos:1.0.0
+    image: pedidos-veloz/pagamentos:1.0.1
     container_name: pedidos-veloz-pagamentos
     expose:
       - "3001"
@@ -64,7 +64,7 @@ services:
   estoque:
     build:
       context: ./estoque
-    image: pedidos-veloz/estoque:1.0.0
+    image: pedidos-veloz/estoque:1.0.1
     container_name: pedidos-veloz-estoque
     expose:
       - "3002"

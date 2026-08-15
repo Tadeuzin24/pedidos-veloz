@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: pedidos-veloz
+
+spec:
+  replicas: 2
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: gateway
+
+  template:
+    metadata:
+      labels:
+        app: gateway
+
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+        - name: gateway
+          image: pedidos-veloz/gateway:1.0.1
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 8080
+
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-config
+                  key: PORT
+
+            - name: PEDIDOS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-config
+                  key: PEDIDOS_URL
+
+            - name: PAGAMENTOS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-config
+                  key: PAGAMENTOS_URL
+
+            - name: ESTOQUE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: gateway-config
+                  key: ESTOQUE_URL
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
