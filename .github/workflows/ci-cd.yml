@@ -70,8 +70,8 @@ jobs:
           context: ./pedidos
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-pedidos:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-pedidos:latest
+            ghcr.io/tadeuzin24/pedidos-veloz-pedidos:${{ github.sha }}
+            ghcr.io/tadeuzin24/pedidos-veloz-pedidos:latest
 
       - name: Build e push - Pagamentos
         uses: docker/build-push-action@v6
@@ -79,8 +79,8 @@ jobs:
           context: ./pagamentos
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-pagamentos:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-pagamentos:latest
+            ghcr.io/tadeuzin24/pedidos-veloz-pagamentos:${{ github.sha }}
+            ghcr.io/tadeuzin24/pedidos-veloz-pagamentos:latest
 
       - name: Build e push - Estoque
         uses: docker/build-push-action@v6
@@ -88,8 +88,8 @@ jobs:
           context: ./estoque
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-estoque:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-estoque:latest
+            ghcr.io/tadeuzin24/pedidos-veloz-estoque:${{ github.sha }}
+            ghcr.io/tadeuzin24/pedidos-veloz-estoque:latest
 
       - name: Build e push - Gateway
         uses: docker/build-push-action@v6
@@ -97,5 +97,5 @@ jobs:
           context: ./gateway
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-gateway:${{ github.sha }}
-            ghcr.io/${{ github.repository_owner }}/pedidos-veloz-gateway:latest
+            ghcr.io/tadeuzin24/pedidos-veloz-gateway:${{ github.sha }}
+            ghcr.io/tadeuzin24/pedidos-veloz-gateway:latest
